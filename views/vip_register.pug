@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+  h1= title
+  br
+  form(method="post" action="")
+    label(for="secret_code") Enter the secret code to gain access:
+    br
+    input(type="text" name="secret_code")
+    br
+    br
+    input(type="submit" value="Submit")
+    br
+    br
+    a(href=`/catalog/user/dashboard/${userDetails.username}`) Return to Dashboard
