@@ -45,8 +45,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain
 
 /**
  * -------------- SESSION SETUP ----------------
@@ -81,6 +79,8 @@ app.use((req, res, next) => {
  * -------------- ROUTES ----------------
  */
 
+app.use('/', indexRouter);
+app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain 
 // Imports all of the routes from ./routes/index.js
 app.use(routes);
 
