@@ -11,16 +11,16 @@ const isAuth = (req, res, next) => {
   }
 };
 
-const isAdmin = (req, res, next) => {
-  if (req.isAuthenticated() && req.user.admin) {
+const isMember = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.member) {
     next();
   } else {
     return res
       .status(401)
       .json({
-        msg: "You are not authorized to view this resource because you are not an Admin.",
+        msg: "You are not authorized to view this resource because you are not a VIP Member.",
       });
   }
 };
 
-module.exports = { isAuth, isAdmin };
+module.exports = { isAuth, isMember };
