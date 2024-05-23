@@ -22,13 +22,6 @@
   "description": "",
   "version": "1.0.0",
   "main": "app.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "engines": {
-    "node": ">=16.17.1"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
