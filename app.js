@@ -8,6 +8,9 @@ var routes = require("./routes");
 const connection = require("./config/database");
 var logger = require("morgan");
 
+const compression = require("compression");
+const helmet = require("helmet");
+
 // Package documentation - https://www.npmjs.com/package/connect-mongo
 const MongoStore = require("connect-mongo");
 
@@ -36,6 +39,26 @@ const catalogRouter = require("./routes/catalog");
 // Create the Express application
 var app = express();
 
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+
+app.use(compression()); // Compress all routes
+
+// Add helmet to the middleware chain.
+// Set CSP headers to allow our Bootstrap and Jquery to be served
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+    },
+  })
+);
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -44,7 +67,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-
 
 /**
  * -------------- SESSION SETUP ----------------
@@ -79,8 +101,8 @@ app.use((req, res, next) => {
  * -------------- ROUTES ----------------
  */
 
-app.use('/', indexRouter);
-app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain 
+app.use("/", indexRouter);
+app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain
 // Imports all of the routes from ./routes/index.js
 app.use(routes);
 
